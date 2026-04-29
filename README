@@ -1,0 +1,47 @@
+## MYSQL(9.6.0)
+### 起動の仕方
+```
+docker build -f Dockerfile.mysql -t mysql_image .
+docker run -d --name mysql_test -e MYSQL_ROOT_PASSWORD=pass -p 3306:3306 mysql_image
+```
+
+### dockerのコンテナの入り方
+```
+docker exec -it mysql_test mysql -u root -p test_db
+```
+Entry passwordを聞かれたらMYSQL_ROOT_PASSWORDのpassを入力する
+
+test_dbにてsql/initのテーブルやデータがすでに入っている。
+
+### docker execで.sqlの文を実行する
+```
+docker exec -i mysql_test mysql -u root -p'pass' test_db < ./sql/example1.sql
+```
+
+### docker execで.sqlの文をEXPLAINで実行する
+```
+cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN SELECT/I' | docker exec -i mysql_test mysql -u root -p'pass' --vertical test_db
+```
+
+## postgres(18.3)
+### 起動の仕方
+```
+docker build -f Dockerfile.postgres -t postgres_image .
+docker run -d --name postgres_test -e POSTGRES_PASSWORD=pass -p 5432:5432 postgres_image
+```
+
+### dockerのコンテナの入り方
+```
+docker exec -it postgres_test psql -U postgres -d test_db
+```
+
+### docker execで.sqlの文を実行する
+```
+docker exec -i postgres_test psql -U postgres -d test_db < ./sql/example1.s
+ql
+```
+
+### docker execで.sqlの文をEXPLAINで実行する
+```
+cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN SELECT/I' | docker exec -i postgres_test psql -U postgres -x -d test_db
+```
