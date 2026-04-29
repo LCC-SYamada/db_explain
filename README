@@ -20,7 +20,7 @@ docker exec -i mysql_test mysql -u root -p'pass' test_db < ./sql/example1.sql
 
 ### docker execで.sqlの文をEXPLAINで実行する
 ```
-cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN SELECT/I' | docker exec -i mysql_test mysql -u root -p'pass' --vertical test_db
+cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN　ANALYZE　SELECT/I' | docker exec -i mysql_test mysql -u root -p'pass' --vertical test_db
 ```
 
 ## postgres(18.3)
@@ -37,11 +37,10 @@ docker exec -it postgres_test psql -U postgres -d test_db
 
 ### docker execで.sqlの文を実行する
 ```
-docker exec -i postgres_test psql -U postgres -d test_db < ./sql/example1.s
-ql
+docker exec -i postgres_test psql -U postgres -d test_db < ./sql/example1.sql
 ```
 
 ### docker execで.sqlの文をEXPLAINで実行する
 ```
-cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN SELECT/I' | docker exec -i postgres_test psql -U postgres -x -d test_db
+cat ./sql/example1.sql | sed '1s/SELECT/EXPLAIN (ANALYZE, BUFFERS, VERBOSE) SELECT/I' | docker exec -i postgres_test psql -U postgres -x -d test_db
 ```
